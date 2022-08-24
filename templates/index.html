@@ -113,7 +113,7 @@
   <script src="https://unpkg.com/@ansur/leaflet-pulse-icon@0.1.1/dist/L.Icon.Pulse.js"></script>
 
   <script src="{% static 'leaflet-sidebar.js' %}"></script>
-
+  {% verbatim %}
   <script>
     var map = L.map('map');
     map.setView([55.753989, 37.623191], 11);
@@ -282,5 +282,6 @@
       }
     }
   </script>
+{% endverbatim %}
 </body>
 </html>

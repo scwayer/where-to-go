@@ -1,5 +1,13 @@
-from django.shortcuts import render
 import json
+
+from django.shortcuts import render
+from django.shortcuts import get_object_or_404
+from django.http import JsonResponse
+from django.urls import reverse
+
+from places.models import Place
+from places.models import Image
+from where_to_go import settings
 
 
 def index(request):
@@ -15,7 +23,7 @@ def index(request):
           "properties": {
             "title": "«Легенды Москвы",
             "placeId": "moscow_legends",
-            "detailsUrl": "./static/places/moscow_legends.json"
+            "detailsUrl": reverse("json_response", args=[1]) #"./static/places/moscow_legends.json"
           }
         },
         {
@@ -27,10 +35,50 @@ def index(request):
           "properties": {
             "title": "Крыши24.рф",
             "placeId": "roofs24",
-            "detailsUrl": "./static/places/roofs24.json"
+            "detailsUrl": reverse("json_response", args=[2]) #"./static/places/roofs24.json"
           }
         }
       ]
     }
-
     return render(request, 'index.html', context={"places": places})
+
+
+def get_place(request, id):
+    place = get_object_or_404(Place, pk=id)
+    title = place.title
+    description_short = place.description_short
+    description_long = place.description_long
+    coordinates = {"lat": place.coordinates_lat,
+                   "lng": place.coordinates_lng}
+    imgs = ["http://127.0.0.1:8000" + image.image.url for image in Image.objects.filter(place__title=place.title)]
+
+    data = {"title": title,
+            "imgs": imgs,
+            "description_short": description_short,
+            "description_long": description_long,
+            "coordinates": coordinates}
+
+    return JsonResponse(data, json_dumps_params={"indent": 4, "ensure_ascii": False})
+
+def get_details(id):
+    place = get_object_or_404(Place, pk=id)
+    title = place.title
+    description_short = place.description_short
+    description_long = place.description_long
+    coordinates = {"lat": place.coordinates_lat,
+                   "lng": place.coordinates_lng}
+    imgs = ["http://127.0.0.1:8000" + image.image.url for image in Image.objects.filter(place__title=place.title)]
+
+    data = {"title": title,
+            "imgs": imgs,
+            "description_short": description_short,
+            "description_long": description_long,
+            "coordinates": coordinates}
+    # print("_______________________")
+    # print(type(json.dumps(data)))
+    # print("_______________________")
+    # print(data)
+    # print("_______________________")
+    # return data
+    return JsonResponse(data, json_dumps_params={"ensure_ascii": False})
+
