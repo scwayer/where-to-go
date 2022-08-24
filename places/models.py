@@ -15,6 +15,7 @@ class Place(models.Model):
 class Image(models.Model):
     title = models.CharField(max_length=255)
     image = models.ImageField()
+    place = models.ForeignKey(Place, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
         return self.title
