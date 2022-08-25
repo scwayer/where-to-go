@@ -16,7 +16,11 @@ class Image(models.Model):
     title = models.CharField(max_length=255)
     image = models.ImageField(verbose_name="Картинка")
     place = models.ForeignKey(Place, on_delete=models.CASCADE, null=True)
-    position = models.IntegerField(null=True, verbose_name="Позиция")
+    position = models.PositiveIntegerField(null=True, verbose_name="Позиция")
+    my_order = models.PositiveIntegerField(default=0, blank=False, null=False)
 
     def __str__(self):
-        return self.title
+        return f"{self.my_order} {self.title}"
+
+    class Meta:
+        ordering = ["my_order"]
