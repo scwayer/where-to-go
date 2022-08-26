@@ -1,4 +1,4 @@
 Django==3.2.15
 django-admin-sortable2
 environs==9.5.0
-tinymce
+django-tinymce
